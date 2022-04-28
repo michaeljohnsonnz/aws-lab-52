@@ -11,11 +11,16 @@
     - [Route Table](#route-table)
   - [Task 3: Create a VPC Security Group](#task-3-create-a-vpc-security-group)
   - [Task 4: Launch a Web Server Instance](#task-4-launch-a-web-server-instance)
-    - [Tag](#tag)
+    - [Name and Tags](#name-and-tags)
+    - [Application and OS Images](#application-and-os-images)
+    - [Instance Type](#instance-type)
+    - [Key Pair](#key-pair)
     - [Network](#network)
+    - [Firewall Security](#firewall-security)
+  - [Configure Storage](#configure-storage)
     - [Advanced Details](#advanced-details)
-    - [Storage](#storage)
     - [Connect to the web server running on the EC2 instance.](#connect-to-the-web-server-running-on-the-ec2-instance)
+    - [Lab Complete](#lab-complete)
 
 ## Build Your VPC and Launch a Web Server
 
@@ -188,34 +193,61 @@ In this task, you will launch an Amazon EC2 instance into the new VPC. You will 
 - In the `AWS Management Console`, select the `Services` menu, `Compute` and `EC2`.
 - Click `Launch Instance`.
 
-### Tag
+### Name and Tags
 
 - Create a tag with the following:
 
 ```
 Key........: Name
 Value......: Web Server 1
-Click Next.: Configure Security Group
 ```
+
+### Application and OS Images
+
+**Note:**  Leave everything with default settings
+
 - Select an `Amazon Machine Image (AMI)`. *Use default*
 - In the row for `Amazon Linux 2` (at the top), click `Select`. *Use default*
-- The `Instance Type` defines the hardware resources assigned to the instance.
+
+### Instance Type
+
+**Note:** Leave everything with default settings
+
 - Select `t2.micro`. *Use default*
 
-**Note:** If you experience an error related to the t3.micro instance type not being available, then rerun this task by selecting t2.micro instead.
+### Key Pair
 
+- Select `vockey`
 ### Network
 
+- For `VPC`, select `vpc-xxxxxxxxxxxxx (Lab 1)`
+- For `Subnet` select `Public Subnet 2`
+- For `Auto assign public IP` select `Enable`
+
+### Firewall Security
+
+- Select an existing security group
+- Select `Web Security Group`.
+
 ```
-Network: Lab VPC
-Subnet: Public Subnet 2 (not Private!)
-Auto-assign Public IP: Enable
+Network...............: Lab VPC
+Subnet................: Public Subnet 2 (not Private!)
+Auto-assign Public IP.: Enable
 ```
+
+**Note:** This is the security group you created in the previous task. It will permit HTTP access to the instance.
+
+## Configure Storage
+
+**Note:** Leave everything with default settings
+
+- 1 x 8 GiB
+- Root Volume: `gp2`
 
 ### Advanced Details
 
-- Expand the  Advanced Details section (at the bottom of the page).
-- Copy and paste this code into the User data box:
+- Expand the `Advanced Details` section (at the bottom of the page).
+- Copy and paste the following code into the `User Data` box:
 
 ```bash
 #!/bin/bash
@@ -231,19 +263,8 @@ service httpd start
 This script will be run automatically when the instance launches for the first time. The script loads and configures a PHP web application.
 ```
 
-### Storage
-
-- Click Next: Add Storage
-- You will use the default settings for storage.
-
-
-Configure the instance to use the Web Security Group that you created earlier.
-- Select an existing security group
-- Select `Web Security Group`.
-
- **Note:** This is the security group you created in the previous task. It will permit HTTP access to the instance.
-
-- Click `Review and Launch`
+- On the right, click `Launch Instance`
+- Click on `View all instances`
 
 - When prompted with a warning that you will not be able to connect to the instance through port 22, click Continue
 
@@ -257,18 +278,10 @@ Configure the instance to use the Web Security Group that you created earlier.
 
 - Copy the `Public (IPv4) DNS` value shown in the `Details` tab at the bottom of the page.
 - Open a new web browser tab, paste the `Public DNS` value and press `Enter`.
+- You should see a web page displaying the AWS logo and instance meta-data values. 
+  
+ **Note:** If the webpage does not load, then ensure `Status checks have passed` and also ensure you are using `http://` instead of `https://` in the web browser.
+ 
+### Lab Complete 
 
- You should see a web page displaying the AWS logo and instance meta-data values. 
- Note: If the webpage does not load, then ensure Status checks have passed and also ensure you are using http:// instead of https:// in the web browser.
- You will use this web application in the next lab.
-
-Lab Complete 
- Congratulations! You have completed the lab.
-
-Additional resources
-For more information about AWS Training and Certification, see https://aws.amazon.com/training/.
-​
-Your feedback is welcome and appreciated.
-If you would like to share any suggestions or corrections, please provide the details in our AWS Training and Certification Contact Form.
-​
-© 2022 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.
+Congratulations! You have completed the lab.
