@@ -1,5 +1,7 @@
 # AWS LAB 52
 
+![AWS](/aws.png)
+
 - [AWS LAB 52](#aws-lab-52)
   - [Build Your VPC and Launch a Web Server](#build-your-vpc-and-launch-a-web-server)
   - [Scenario](#scenario)
@@ -252,15 +254,22 @@ Auto-assign Public IP.: Enable
 ```bash
 #!/bin/bash
 # Install Apache Web Server and PHP
-yum install -y httpd mysql php
+yum install -y nginx
+yum install git
+
 # Download Lab files
-#wget https://aws-tc-largeobjects.s3.amazonaws.com/ILT-TF-100-TUFOUN-1/4-lab-vpc-web-server/lab-app.zip
-wget %% S3_HTTP_PATH_PREFIX %%/lab-app.zip
-unzip lab-app.zip -d /var/www/html/
-# Turn on web server
-chkconfig httpd on
-service httpd start
-This script will be run automatically when the instance launches for the first time. The script loads and configures a PHP web application.
+git clone https://github.com/michaeljohnsonnz/react-example.git
+
+# Ensure directory exists
+mkdir -p /var/www
+
+# Create symbolic link to the build directory
+ln -s "${PWD}/react-example/build" "/var/www/build"
+
+# Enable and start nginx server
+service nginx enable
+service nginx start
+
 ```
 
 - On the right, click `Launch Instance`
